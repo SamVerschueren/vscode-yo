@@ -3,7 +3,11 @@
 import {window} from 'vscode';
 import PromptFactory from '../prompts/factory';
 
+const logger = require('yeoman-environment/lib/util/log');
+
 export default class CodeAdapter {
+
+	public log = logger();
 
 	public prompt(questions, callback) {
 		let answers = {};
@@ -31,6 +35,4 @@ export default class CodeAdapter {
 	public diff(actual, expected) {
 		console.log(actual);
 	}
-
-	public log = require('yeoman-environment/lib/util/log')();
 }

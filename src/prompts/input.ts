@@ -24,7 +24,7 @@ export default class InputPrompt extends Prompt {
 
 		return window.showInputBox(options)
 			.then(result => {
-				result = result || this._question.default;
+				result = result || this._question.default || '';
 
 				const valid = this._question.validate ? this._question.validate(result || '') : true;
 
