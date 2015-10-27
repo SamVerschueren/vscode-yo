@@ -1,6 +1,6 @@
 {
   "name": "vscode-yo",
-  "description": "Run yeoman generators from within code",
+  "description": "Scaffold projects using Yeoman.",
   "version": "0.0.1",
   "publisher": "samverschueren",
   "engines": {
@@ -14,7 +14,7 @@
     "commands": [
       {
         "command": "yo",
-        "title": "yo"
+        "title": "Yo"
       }
     ]
   },
