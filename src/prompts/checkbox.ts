@@ -13,7 +13,7 @@ export default class CheckboxPrompt extends Prompt {
 
 	public render() {
 		let choices = this._question.choices.reduce((result, choice) => {
-			result[`${choice.checked === true ? figures.circleFilled : figures.circle} ${choice.name}`] = choice;
+			result[`${choice.checked === true ? figures.radioOn : figures.radioOff} ${choice.name}`] = choice;
 			return result;
 		}, {});
 
