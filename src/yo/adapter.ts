@@ -1,6 +1,7 @@
 'use strict';
 
-import {window} from 'vscode';
+import {window, OutputChannel} from 'vscode';
+import * as util from 'util';
 import PromptFactory from '../prompts/factory';
 
 const logger = require('yeoman-environment/lib/util/log');
@@ -8,6 +9,16 @@ const logger = require('yeoman-environment/lib/util/log');
 export default class CodeAdapter {
 
 	public log = logger();
+
+	constructor() {
+		const outChannel: OutputChannel = window.getOutputChannel('Yeoman');
+		outChannel.reveal();
+
+		this.log.write = function() {
+			outChannel.append(util.format.apply(util, arguments));
+			return this;
+		};
+	}
 
 	public prompt(questions, callback) {
 		let answers = {};

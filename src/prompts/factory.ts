@@ -9,10 +9,9 @@ import CheckboxPrompt from './checkbox';
 export default class PromptFactory {
 	public static createPrompt(question: any): Prompt {
 		/**
-		 * - confirm
-		 * - folder
-		 * - expand
-		 * - checkbox
+		 * TODO:
+		 *   - folder
+		 *   - expand
 		 */
 		switch (question.type || 'input') {
 			case 'string':
