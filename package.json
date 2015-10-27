@@ -26,6 +26,7 @@
     "vscode": "*"
   },
   "dependencies": {
+    "figures": "^1.4.0",
     "findup-sync": "^0.3.0",
     "fix-path": "^1.1.0",
     "lodash": "^3.10.1",
