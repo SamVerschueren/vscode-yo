@@ -6,11 +6,21 @@ import ListPrompt from './list';
 
 export default class PromptFactory {
 	public static createPrompt(question: any): Prompt {
+		/**
+		 * - confirm
+		 * - folder
+		 * - expand
+		 * - checkbox
+		 */
 		switch (question.type || 'input') {
+			case 'string':
+			case 'input':
+			case 'password':
+				return new InputPrompt(question);
 			case 'list':
 				return new ListPrompt(question);
 			default:
-				return new InputPrompt(question);
+				throw new Error(`Could not find a prompt for question type ${question.type}`);
 		}
 	}
 }

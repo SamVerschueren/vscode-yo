@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {window, commands} from 'vscode';
+import {window, workspace, commands} from 'vscode';
 import path = require('path');
 import fs = require('fs');
 
@@ -9,6 +9,8 @@ import Yeoman from './yo/yo';
 const yo = new Yeoman();
 
 export function activate() {
+	const cwd = workspace.getPath();
+
 	commands.registerCommand('yo', () => {
 		list()
 			.then(generators => {
@@ -20,7 +22,7 @@ export function activate() {
 				}));
 			})
 			.then(generator => {
-				yo.run(generator.label);
+				yo.run(generator.label, cwd);
 			})
 			.catch(err => {
 				console.error(err);

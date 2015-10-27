@@ -54,9 +54,12 @@ export default class Yeoman {
 		return _.compact(list);
 	}
 
-	public run(generator: string, cwd?: string) {
-		const prefix = 'generator-';
+	public run(generator: string, cwd: string) {
+		// TODO test if cwd exists
 
+		process.chdir(cwd);
+
+		const prefix = 'generator-';
 		if (generator.indexOf(prefix) === 0) {
 			generator = generator.slice(prefix.length);
 		}
