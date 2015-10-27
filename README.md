@@ -8,7 +8,7 @@ Press <kbd>F1</kbd> and narrow down the list commands by typing `extension`. Pic
 
 ![](https://github.com/SamVerschueren/vscode-yo/raw/master/screenshots/install.png)
 
-Simply pick the `final-newline` extension from the list
+Simply pick the `yo` extension from the list
 
 ## Usage
 
