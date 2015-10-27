@@ -1,7 +1,7 @@
 {
   "name": "vscode-yo",
   "description": "Scaffold projects using Yeoman.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "samverschueren",
   "engines": {
     "vscode": "*"
