@@ -3,6 +3,8 @@
 import {window, InputBoxOptions} from 'vscode';
 import Prompt from './prompt';
 
+const figures = require('figures');
+
 export default class InputPrompt extends Prompt {
 
 	constructor(question: any) {
@@ -29,12 +31,12 @@ export default class InputPrompt extends Prompt {
 				const valid = this._question.validate ? this._question.validate(result || '') : true;
 
 				if (valid !== true) {
-					this._question.default = new Error(valid);
+					this._question.default = new Error(`${figures.warning} ${valid}`);
 
 					return this.render();
 				}
 
-				return this._question.filter ? this._question.filter(result) : result;
+				return result;
 			});
 	}
 }

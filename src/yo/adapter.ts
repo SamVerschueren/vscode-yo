@@ -27,15 +27,14 @@ export default class CodeAdapter {
 			return promise.then(() => {
 				return PromptFactory.createPrompt(question);
 			}).then(prompt => {
-				return prompt.render();
-			}).then(result => {
-				answers[question.name] = result;
+				if (!question.when || question.when(answers) === true) {
+					return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
+				}
 			});
 		}, Promise.resolve());
 
 		promise
 			.then(() => {
-				console.log(JSON.stringify(answers, undefined, '  '));
 				callback(answers);
 			})
 			.catch(err => {
