@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 
 import createEnvironment from './environment';
 
-const findup = require('findup-sync');
+const findup = require('find-up');
 const semver = require('semver')
 
 export default class Yeoman {
@@ -29,7 +29,7 @@ export default class Yeoman {
 		});
 
 		list = list.map(item => {
-			const pkgPath = findup('package.json', {cwd: (<any>item).resolved});
+			const pkgPath = findup.sync('package.json', {cwd: (<any>item).resolved});
 			if (!pkgPath) {
 				return null;
 			}
