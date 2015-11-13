@@ -22,7 +22,9 @@ export function activate(context: ExtensionContext) {
 				}));
 			})
 			.then(generator => {
-				yo.run(generator.label, cwd);
+				if (generator !== undefined) {
+					yo.run(generator.label, cwd);
+				}
 			})
 			.catch(err => {
 				console.error(err);
