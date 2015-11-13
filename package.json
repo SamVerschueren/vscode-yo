@@ -14,7 +14,7 @@
     "commands": [
       {
         "command": "yo",
-        "title": "Yo"
+        "title": "yo"
       }
     ]
   },
@@ -30,7 +30,6 @@
     "figures": "^1.4.0",
     "find-up": "^1.0.0",
     "fix-path": "^1.1.0",
-    "lodash": "^3.10.1",
     "semver": "^5.0.3",
     "yeoman-environment": "^1.3.0"
   }
