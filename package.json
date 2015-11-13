@@ -4,10 +4,10 @@
   "version": "0.1.2",
   "publisher": "samverschueren",
   "engines": {
-    "vscode": "*"
+    "vscode": "0.10.x"
   },
   "activationEvents": [
-    "command:yo"
+    "onCommand:yo"
   ],
   "main": "./out/extension",
   "contributes": {

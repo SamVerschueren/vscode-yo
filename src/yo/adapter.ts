@@ -11,8 +11,8 @@ export default class CodeAdapter {
 	public log = logger();
 
 	constructor() {
-		const outChannel: OutputChannel = window.getOutputChannel('Yeoman');
-		outChannel.reveal();
+		const outChannel: OutputChannel = window.createOutputChannel('Yeoman');
+		outChannel.show();
 
 		this.log.write = function() {
 			outChannel.append(util.format.apply(util, arguments));
