@@ -3,6 +3,7 @@
 import {window, OutputChannel} from 'vscode';
 import * as util from 'util';
 import PromptFactory from '../prompts/factory';
+import EscapeException from '../utils/EscapeException';
 
 const logger = require('yeoman-environment/lib/util/log');
 
@@ -38,6 +39,10 @@ export default class CodeAdapter {
 				callback(answers);
 			})
 			.catch(err => {
+				if (err instanceof EscapeException) {
+					return;
+				}
+
 				window.showErrorMessage(err.message);
 			});
 	}
