@@ -15,6 +15,12 @@ export default class CodeAdapter {
 		const outChannel: OutputChannel = window.createOutputChannel('Yeoman');
 		outChannel.show();
 
+		// TODO Do not overwrite these methods
+		console.error = console.log = function() {
+			outChannel.appendLine(util.format.apply(util, arguments));
+			return this;
+		};
+
 		this.log.write = function() {
 			outChannel.append(util.format.apply(util, arguments));
 			return this;
