@@ -1,6 +1,6 @@
 'use strict';
 
-import {window, workspace, commands, ExtensionContext} from 'vscode';
+import {window, workspace, commands, ExtensionContext, QuickPickItem} from 'vscode';
 import path = require('path');
 import fs = require('fs');
 
@@ -12,32 +12,26 @@ export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
 
 	const disposable = commands.registerCommand('yo', () => {
-		list()
-			.then(generators => {
-				return window.showQuickPick(generators.map(generator => {
-					return {
-						label: generator.name.split(/\-(.+)?/)[1],
-						description: generator.description
-					};
-				}));
-			})
+		return window.showQuickPick(list())
 			.then(generator => {
 				if (generator !== undefined) {
 					yo.run(generator.label, cwd);
 				}
-			})
-			.catch(err => {
-				console.error(err);
 			});
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-function list(): Promise<any[]> {
+function list(): Promise<QuickPickItem[]> {
 	return new Promise(resolve => {
 		yo.getEnvironment().lookup(() => {
-			resolve(yo.getGenerators());
+			resolve(yo.getGenerators().map(generator => {
+				return {
+					label: generator.name.split(/\-(.+)?/)[1],
+					description: generator.description
+				};
+			}));
 		});
 	});
 }

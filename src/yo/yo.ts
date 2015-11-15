@@ -20,7 +20,7 @@ export default class Yeoman {
 		return this._env;
 	}
 
-	public getGenerators() {
+	public getGenerators(): any[] {
 		var generatorsMeta = this._env.store.getGeneratorsMeta();
 
 		// Remove sub generators from list
