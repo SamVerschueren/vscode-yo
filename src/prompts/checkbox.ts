@@ -2,6 +2,7 @@
 
 import {window, QuickPickItem, QuickPickOptions} from 'vscode';
 import Prompt from './prompt';
+import EscapeException from '../utils/EscapeException';
 
 const figures = require('figures');
 
@@ -18,12 +19,19 @@ export default class CheckboxPrompt extends Prompt {
 		}, {});
 
 		const options: QuickPickOptions = {
-			placeHolder: `${this._question.message} (Press Esc to continue)`
+			placeHolder: this._question.message
 		};
 
-		return window.showQuickPick(Object.keys(choices), options)
+		let quickPickOptions = Object.keys(choices);
+		quickPickOptions.push(figures.tick);
+
+		return window.showQuickPick(quickPickOptions, options)
 			.then(result => {
-				if (result !== undefined) {
+				if (result === undefined) {
+					throw new EscapeException();
+				}
+
+				if (result !== figures.tick) {
 					choices[result].checked = !choices[result].checked;
 
 					return this.render();
