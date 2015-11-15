@@ -2,6 +2,7 @@
 
 import {window, InputBoxOptions} from 'vscode';
 import Prompt from './prompt';
+import EscapeException from '../utils/EscapeException';
 
 const figures = require('figures');
 
@@ -26,7 +27,13 @@ export default class InputPrompt extends Prompt {
 
 		return window.showInputBox(options)
 			.then(result => {
-				result = result || this._question.default || '';
+				if (result === undefined) {
+					throw new EscapeException();
+				}
+
+				if (result === '') {
+					result = this._question.default || '';
+				}
 
 				const valid = this._question.validate ? this._question.validate(result || '') : true;
 

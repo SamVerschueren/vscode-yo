@@ -2,6 +2,7 @@
 
 import {window, QuickPickItem, QuickPickOptions} from 'vscode';
 import Prompt from './prompt';
+import EscapeException from '../utils/EscapeException';
 
 export default class ConfirmPrompt extends Prompt {
 
@@ -11,8 +12,8 @@ export default class ConfirmPrompt extends Prompt {
 
 	public render() {
 		const choices = {
-			"Yes": true,
-			"No": false
+			Yes: true,
+			No: false
 		};
 
 		const options: QuickPickOptions = {
@@ -21,11 +22,11 @@ export default class ConfirmPrompt extends Prompt {
 
 		return window.showQuickPick(Object.keys(choices), options)
 			.then(result => {
-				if (choices[result] === undefined) {
-					return this.render();
+				if (result === undefined) {
+					throw new EscapeException();
 				}
 
-				return choices[result];
+				return choices[result] || false;
 			});
 	}
 }
