@@ -1,7 +1,7 @@
 {
   "name": "yo",
   "description": "Scaffold projects using Yeoman.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "publisher": "samverschueren",
   "engines": {
     "vscode": "0.10.x"
