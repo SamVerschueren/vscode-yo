@@ -16,7 +16,7 @@
     "url": "github.com/SamVerschueren"
   },
   "publisher": "samverschueren",
-  "icon": "media/icon.png",
+  "icon": "icon.png",
   "engines": {
     "vscode": "0.10.x"
   },
