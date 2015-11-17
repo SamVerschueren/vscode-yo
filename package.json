@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/SamVerschueren/vscode-yo"
   },
+  "bugs": {
+    "url": "https://github.com/SamVerschueren/vscode-yo/issues"
+	},
   "author": {
     "name": "Sam Verschueren",
     "email": "sam.verschueren@gmail.com",
