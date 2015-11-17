@@ -5,13 +5,13 @@ import InputPrompt from './input';
 import ListPrompt from './list';
 import ConfirmPrompt from './confirm';
 import CheckboxPrompt from './checkbox';
+import ExpandPrompt from './expand';
 
 export default class PromptFactory {
 	public static createPrompt(question: any): Prompt {
 		/**
 		 * TODO:
 		 *   - folder
-		 *   - expand
 		 */
 		switch (question.type || 'input') {
 			case 'string':
@@ -24,6 +24,8 @@ export default class PromptFactory {
 				return new ConfirmPrompt(question);
 			case 'checkbox':
 				return new CheckboxPrompt(question);
+			case 'expand':
+				return new ExpandPrompt(question);
 			default:
 				throw new Error(`Could not find a prompt for question type ${question.type}`);
 		}
