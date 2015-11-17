@@ -1,6 +1,6 @@
 'use strict';
 
-import {window, InputBoxOptions} from 'vscode';
+import {window, QuickPickOptions} from 'vscode';
 import Prompt from './prompt';
 import EscapeException from '../utils/EscapeException';
 
@@ -11,6 +11,22 @@ export default class ExpandPrompt extends Prompt {
 	}
 
 	public render() {
-		console.log(this._question);
+    const choices = this._question.choices.reduce((result, choice) => {
+      result[choice.name] = choice.value;
+      return result;
+    }, {});
+
+		const options: QuickPickOptions = {
+			placeHolder: this._question.message
+    };
+
+		return window.showQuickPick(Object.keys(choices), options)
+			.then(result => {
+				if (result === undefined) {
+					throw new EscapeException();
+				}
+
+				return choices[result] || false;
+			});
 	}
 }
