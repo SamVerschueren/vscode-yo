@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 
 import createEnvironment from './environment';
 
-const findup = require('find-up');
+const readPkgUp = require('read-pkg-up');
 const semver = require('semver')
 
 export default class Yeoman {
@@ -28,13 +28,13 @@ export default class Yeoman {
 			return (<any>item).namespace.split(':')[1] === 'app';
 		});
 
-		list = list.map(item => {
-			const pkgPath = findup.sync('package.json', {cwd: (<any>item).resolved});
-			if (!pkgPath) {
+		list = list.map((item: any) => {
+			const pkgPath = readPkgUp.sync({cwd: item.resolved});
+			if (!pkgPath.pkg) {
 				return null;
 			}
 
-			const pkg: any = JSON.parse(fs.readFileSync(pkgPath).toString());
+			const pkg = pkgPath.pkg;
 			const generatorVersion: any = pkg.dependencies['yeoman-generator'];
 			const generatorMeta: any = _.pick(pkg, 'name', 'version', 'description');
 
