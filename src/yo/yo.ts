@@ -1,19 +1,27 @@
 'use strict';
 
+import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
 import * as fs from 'fs';
 import * as _ from 'lodash';
 
 import createEnvironment from './environment';
 
 const readPkgUp = require('read-pkg-up');
-const semver = require('semver')
+const semver = require('semver');
+const elegantSpinner = require('elegant-spinner');
+
+const frame = elegantSpinner();
 
 export default class Yeoman {
 
 	private _env: any;
+	private _status: StatusBarItem;
+	private _interval: any;
 
 	public constructor() {
 		this._env = createEnvironment();
+		this._status = window.createStatusBarItem(StatusBarAlignment.Left);
+		this._interval;
 	}
 
 	public getEnvironment(): any {
@@ -66,14 +74,31 @@ export default class Yeoman {
 
 		this._env.run(generator, this.done)
 			.on('npmInstall', () => {
-				console.log('running npm install');
+				this.setState('install node dependencies');
 			})
 			.on('bowerInstall', () => {
-				console.log('running bower install');
+				this.setState('install bower dependencies');
 			})
 			.on('end', () => {
+				this.clearState();
 				console.log('done');
 			});
+	}
+
+	private setState(state: string) {
+		console.log(state);
+
+		this._status.show();
+		this._status.tooltip = state;
+
+		this._interval = setInterval(() => {
+			this._status.text = frame() + ' yo';
+		}, 50);
+	}
+
+	private clearState() {
+		clearInterval(this._interval);
+		this._status.dispose();
 	}
 
 	private done(err) {

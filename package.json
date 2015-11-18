@@ -9,7 +9,7 @@
   },
   "bugs": {
     "url": "https://github.com/SamVerschueren/vscode-yo/issues"
-	},
+  },
   "author": {
     "name": "Sam Verschueren",
     "email": "sam.verschueren@gmail.com",
@@ -40,6 +40,7 @@
     "vscode": "*"
   },
   "dependencies": {
+    "elegant-spinner": "^1.0.1",
     "error-ex": "^1.3.0",
     "figures": "^1.4.0",
     "fix-path": "^1.1.0",
