@@ -8,8 +8,14 @@ const figures = require('figures');
 
 export default class InputPrompt extends Prompt {
 
+	protected _options: InputBoxOptions;
+
 	constructor(question: any) {
 		super(question);
+
+		this._options = {
+			prompt: this._question.message
+		};
 	}
 
 	public render() {
@@ -20,12 +26,9 @@ export default class InputPrompt extends Prompt {
 			this._question.default = undefined;
 		}
 
-		const options: InputBoxOptions = {
-			prompt: this._question.message,
-			placeHolder: placeHolder
-		};
+		this._options.placeHolder = placeHolder;
 
-		return window.showInputBox(options)
+		return window.showInputBox(this._options)
 			.then(result => {
 				if (result === undefined) {
 					throw new EscapeException();
