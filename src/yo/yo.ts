@@ -64,12 +64,21 @@ export default class Yeoman {
 			generator = generator.slice(prefix.length);
 		}
 
-		this._env.run(generator, err => {
-			if (err) {
-				// Handle Error
-			}
-		}).on('end', function () {
-			console.log('end');
-		});
+		this._env.run(generator, this.done)
+			.on('npmInstall', () => {
+				console.log('running npm install');
+			})
+			.on('bowerInstall', () => {
+				console.log('running bower install');
+			})
+			.on('end', () => {
+				console.log('done');
+			});
+	}
+
+	private done(err) {
+		if (err) {
+			// handle error
+		}
 	}
 }
