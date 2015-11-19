@@ -20,7 +20,7 @@ export default class PromptFactory {
 			case 'input':
 				return new InputPrompt(question);
 			case 'password':
-				return new PasswordPrompt(question);    
+				return new PasswordPrompt(question);
 			case 'list':
 				return new ListPrompt(question);
 			case 'confirm':

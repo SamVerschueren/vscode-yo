@@ -11,14 +11,14 @@ export default class ExpandPrompt extends Prompt {
 	}
 
 	public render() {
-    const choices = this._question.choices.reduce((result, choice) => {
-      result[choice.name] = choice.value;
-      return result;
-    }, {});
+		const choices = this._question.choices.reduce((result, choice) => {
+			result[choice.name] = choice.value;
+			return result;
+		}, {});
 
 		const options: QuickPickOptions = {
 			placeHolder: this._question.message
-    };
+		};
 
 		return window.showQuickPick(Object.keys(choices), options)
 			.then(result => {

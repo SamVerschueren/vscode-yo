@@ -6,7 +6,7 @@ import yeoman = require('yeoman-environment');
 
 const win32 = process.platform === 'win32';
 
-const getNpmPaths = function() {
+const getNpmPaths = function () {
 	if (process.env.NODE_PATH) {
 		return process.env.NODE_PATH.split(path.delimiter);
 	}
@@ -14,9 +14,7 @@ const getNpmPaths = function() {
 	require('fix-path')();
 
 	// Get the npm path from the user env variables.
-	const paths = process.env.PATH.split(path.delimiter).map(function(item) {
-		return path.join(item, '..', 'lib', 'node_modules');
-	});
+	const paths = process.env.PATH.split(path.delimiter).map(item => path.join(item, '..', 'lib', 'node_modules'));
 
 	// Default paths for each system
 	if (win32) {
@@ -28,7 +26,7 @@ const getNpmPaths = function() {
 	return paths.reverse();
 };
 
-export default function(args?: any[], opts?: any) {
+export default function (args?: any[], opts?: any) {
 	args = args || [];
 	opts = opts || {};
 

@@ -92,7 +92,7 @@ export default class Yeoman {
 		this._status.tooltip = state;
 
 		this._interval = setInterval(() => {
-			this._status.text = frame() + ' yo';
+			this._status.text = `${frame()} yo`;
 		}, 50);
 	}
 
