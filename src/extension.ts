@@ -6,13 +6,13 @@ import fs = require('fs');
 
 import Yeoman from './yo/yo';
 
-const yo = new Yeoman();
-
 export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
 
 	const disposable = commands.registerCommand('yo', () => {
-		return window.showQuickPick(list())
+		const yo = new Yeoman();
+
+		return window.showQuickPick(list(yo))
 			.then(generator => {
 				if (generator !== undefined) {
 					yo.run(generator.label, cwd);
@@ -23,7 +23,7 @@ export function activate(context: ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-function list(): Promise<QuickPickItem[]> {
+function list(yo: Yeoman): Promise<QuickPickItem[]> {
 	return new Promise(resolve => {
 		yo.getEnvironment().lookup(() => {
 			resolve(yo.getGenerators().map(generator => {
