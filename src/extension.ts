@@ -4,9 +4,9 @@ import {window, workspace, commands, ExtensionContext, QuickPickItem, InputBoxOp
 import EscapeException from './utils/EscapeException'
 import Yeoman from './yo/yo';
 
-import path = require('path');
-import fs = require('fs');
-import figures = require('figures');
+const path = require('path');
+const fs = require('fs');
+const figures = require('figures');
 
 export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
