@@ -31,14 +31,15 @@ export default class Yeoman {
 	}
 
 	public getGenerators(): any[] {
-		var generatorsMeta = this._env.store.getGeneratorsMeta();
+		const generatorsMeta = this._env.store.getGeneratorsMeta();
 
 		// Remove sub generators from list
-		var list = _.filter(generatorsMeta, item => {
-			return (<any>item).namespace.split(':')[1] === 'app';
-		});
+		let list = Object.keys(generatorsMeta).filter((key: any) => key.split(':')[1] === 'app');
 
-		list = list.map((item: any) => {
+		list = list.map(key => {
+			const item = generatorsMeta[key];
+			const name = key.split(':')[0];
+
 			const pkgPath = readPkgUp.sync({cwd: item.resolved});
 			if (!pkgPath.pkg) {
 				return null;
@@ -57,6 +58,17 @@ export default class Yeoman {
 			if (generatorMeta.repository && generatorMeta.repository.url) {
 				generatorMeta.officialGenerator = generatorMeta.repository.url.indexOf('github.com/yeoman/') > -1;
 			}
+
+			// Add subgenerators
+			generatorMeta.subGenerators = Object.keys(generatorsMeta).reduce((result, key: any) => {
+				const split = key.split(':');
+
+				if (split[0] === name) {
+					result.push(split[1]);
+				}
+
+				return result;
+			}, []);
 
 			return generatorMeta;
 		});
