@@ -1,28 +1,40 @@
 'use strict';
 
-import {window, OutputChannel} from 'vscode';
+import {window, OutputChannel, ViewColumn} from 'vscode';
 import * as util from 'util';
 import PromptFactory from '../prompts/factory';
 import EscapeException from '../utils/EscapeException';
 
 const logger = require('yeoman-environment/lib/util/log');
+const diff = require('diff');
 
 export default class CodeAdapter {
 
 	public log = logger();
+	private outChannel: OutputChannel;
+	private outBuffer: string = '';
 
 	constructor() {
-		const outChannel: OutputChannel = window.createOutputChannel('Yeoman');
-		outChannel.show();
+		let self = this;
+		
+		this.outChannel = window.createOutputChannel('Yeoman');
+		this.outChannel.clear();		
+		this.outChannel.show();
 
 		// TODO Do not overwrite these methods
 		console.error = console.log = function() {
-			outChannel.appendLine(util.format.apply(util, arguments));
+			const line = util.format.apply(util, arguments);
+			
+			self.outBuffer += `${line}\n`;
+			self.outChannel.appendLine(line);
 			return this;
 		};
 
 		this.log.write = function() {
-			outChannel.append(util.format.apply(util, arguments));
+			const line = util.format.apply(util, arguments);
+			
+			self.outBuffer += line;
+			self.outChannel.append(line);
 			return this;
 		};
 	}
@@ -42,6 +54,9 @@ export default class CodeAdapter {
 
 		promise
 			.then(() => {
+				this.outChannel.clear();
+				this.outChannel.append(this.outBuffer);
+				
 				callback(answers);
 			})
 			.catch(err => {
@@ -54,6 +69,28 @@ export default class CodeAdapter {
 	}
 
 	public diff(actual, expected) {
-		console.log(actual);
+		this.outChannel.clear();
+		
+		let result = diff.diffLines(actual, expected);
+		
+		result.map(part => {
+			let prefix = ' ';
+			
+			if (part.added === true) {
+				prefix = '+';
+			} else if (part.removed === true) {
+				prefix = '-';
+			}
+			
+			part.value = part.value.split('\n').map(line => {
+				if (line.trim().length === 0) {
+					return line;
+				}
+				
+				return `${prefix}${line}`
+			}).join('\n');
+			
+			this.outChannel.append(part.value);
+		});
 	}
 }
