@@ -86,17 +86,23 @@ export default class Yeoman {
 			generator = generator.slice(prefix.length);
 		}
 
-		this._env.run(generator, this.done)
-			.on('npmInstall', () => {
-				this.setState('install node dependencies');
-			})
-			.on('bowerInstall', () => {
-				this.setState('install bower dependencies');
-			})
-			.on('end', () => {
-				this.clearState();
-				console.log(`${EOL}${figures.tick} done`);
+		window.showQuickPick(new Promise((resolve, reject) => {
+			setImmediate(() => {
+				this._env.run(generator, this.done)
+					.on('npmInstall', () => {
+						this.setState('install node dependencies');
+					})
+					.on('bowerInstall', () => {
+						this.setState('install bower dependencies');
+					})
+					.on('end', () => {
+						this.clearState();
+						console.log(`${EOL}${figures.tick} done`);
+					});
+
+				reject();
 			});
+		})).then(undefined, () => { });
 	}
 
 	private setState(state: string) {
@@ -116,6 +122,7 @@ export default class Yeoman {
 	}
 
 	private done(err) {
+		console.log('done');
 		if (err) {
 			// handle error
 		}
