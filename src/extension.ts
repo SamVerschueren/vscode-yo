@@ -42,23 +42,22 @@ export function activate(context: ExtensionContext) {
 
 				sub = subGenerator;
 
-				try {
-					yo.run(`${main}:${sub}`, cwd);
-				} catch (err) {
-					if (err.message.toLowerCase() === 'did not provide required argument name!') {
-						const options: InputBoxOptions = {
-							prompt: `${subGenerator} name?`
-						};
+				return yo.run(`${main}:${sub}`, cwd);
+			})
+			.catch(err => {
+				if (err.message.toLowerCase() === 'did not provide required argument name!') {
+					const options: InputBoxOptions = {
+						prompt: `${sub} name?`
+					};
 
-						return window.showInputBox(options);
-					}
-
-					throw err;
+					return window.showInputBox(options);
 				}
+
+				throw err;
 			})
 			.then(argument => {
 				if (argument !== undefined) {
-					yo.run(`${main}:${sub} ${argument}`, cwd);
+					return yo.run(`${main}:${sub} ${argument}`, cwd);
 				}
 			})
 			.catch(err => {
