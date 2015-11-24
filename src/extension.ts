@@ -16,6 +16,11 @@ export function activate(context: ExtensionContext) {
 
 		let main, sub;
 
+		if (!cwd) {
+			window.showErrorMessage('Please open a workspace directory first.');
+			return;
+		}
+
 		Promise.resolve(window.showQuickPick(list(yo)))
 			.then((generator: any) => {
 				if (generator === undefined) {
@@ -47,6 +52,8 @@ export function activate(context: ExtensionContext) {
 
 						return window.showInputBox(options);
 					}
+
+					throw err;
 				}
 			})
 			.then(argument => {
@@ -58,7 +65,7 @@ export function activate(context: ExtensionContext) {
 				if (err instanceof EscapeException) {
 					return;
 				}
-				
+
 				window.showErrorMessage(err.message || err);
 			});
 	});
@@ -69,18 +76,18 @@ export function activate(context: ExtensionContext) {
 function runSubGenerators(subGenerators: string[]) {
 	const app = `${figures.star} app`;
 	const index = subGenerators.indexOf('app');
-	
+
 	if (index !== -1) {
 		subGenerators.splice(index, 1);
 		subGenerators.unshift(app);
 	}
-	
+
 	return window.showQuickPick(subGenerators)
 		.then(choice => {
 			if (choice === app) {
 				return 'app';
 			}
-			
+
 			return choice;
 		});
 }

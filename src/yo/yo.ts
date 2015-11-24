@@ -77,7 +77,9 @@ export default class Yeoman {
 	}
 
 	public run(generator: string, cwd: string) {
-		// TODO test if cwd exists
+		if (!cwd) {
+			throw new Error('Please open a workspace directory first.');
+		}
 
 		process.chdir(cwd);
 
