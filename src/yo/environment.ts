@@ -4,6 +4,7 @@ import * as path from 'path';
 import CodeAdapter from './adapter';
 import yeoman = require('yeoman-environment');
 
+const stripAnsi = require('strip-ansi');
 const win32 = process.platform === 'win32';
 
 const getNpmPaths = function () {
@@ -14,7 +15,7 @@ const getNpmPaths = function () {
 	require('fix-path')();
 
 	// Get the npm path from the user env variables.
-	const paths = process.env.PATH.split(path.delimiter).map(item => path.join(item, '..', 'lib', 'node_modules'));
+	const paths = stripAnsi(process.env.PATH).split(path.delimiter).map(item => path.join(item, '..', 'lib', 'node_modules'));
 
 	// Default paths for each system
 	if (win32) {
