@@ -1,10 +1,14 @@
 'use strict';
 
 import * as path from 'path';
+import * as fs from 'fs';
+import * as childProcess from 'child_process';
+import {EOL} from 'os';
 import CodeAdapter from './adapter';
 import yeoman = require('yeoman-environment');
 
 const stripAnsi = require('strip-ansi');
+const uniq = require('array-uniq');
 const win32 = process.platform === 'win32';
 
 const getNpmPaths = function () {
@@ -19,12 +23,29 @@ const getNpmPaths = function () {
 
 	// Default paths for each system
 	if (win32) {
-		paths.push(path.join(process.env.APPDATA, 'npm/node_modules'));
+		paths.push(path.join(process.env.APPDATA, 'npm', 'node_modules'));
 	} else {
 		paths.push('/usr/lib/node_modules');
 	}
 
-	return paths.reverse();
+	try {
+		// Somehow `npm get prefix` does not return the correct value
+		const userconfig = childProcess.execSync('npm get userconfig', {encoding: 'utf8'}).toString().trim();
+		const content = fs.readFileSync(userconfig).toString('utf8');
+		const match = content.match(new RegExp(`prefix=(.*?)${EOL}`));
+
+		if (match) {
+			if (win32) {
+				paths.push(path.join(match[1], 'node_modules'));
+			} else {
+				paths.push(path.join(match[1], 'lib', 'node_modules'));
+			}
+		}
+	} catch (err) {
+
+	}
+
+	return uniq(paths.reverse());
 };
 
 export default function (args?: any[], opts?: any) {
