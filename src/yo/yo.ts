@@ -88,52 +88,31 @@ export default class Yeoman {
 			generator = generator.slice(prefix.length);
 		}
 
-		return new Promise((resolve, reject) => {
-			try {
-				this._env.run(generator, this.done)
-					.on('npmInstall', () => {
-						this.setState('install node dependencies');
-					})
-					.on('bowerInstall', () => {
-						this.setState('install bower dependencies');
-					})
-					.on('end', () => {
-						this.clearState();
-						console.log(`${EOL}${figures.tick} done`);
-					});
+		return Promise.resolve(window.showQuickPick(new Promise((resolve, reject) => {
+			setImmediate(() => {
+				try {
+					this._env.run(generator, this.done)
+						.on('npmInstall', () => {
+							this.setState('install node dependencies');
+						})
+						.on('bowerInstall', () => {
+							this.setState('install bower dependencies');
+						})
+						.on('end', () => {
+							this.clearState();
+							console.log(`${EOL}${figures.tick} done`);
+						});
 
-				resolve();
-			} catch (err) {
-				reject(err);
+					reject();
+				} catch (err) {
+					reject(err);
+				}
+			});
+		}))).catch(err => {
+			if (err) {
+				throw err;
 			}
 		});
-
-		// https://github.com/Microsoft/vscode/issues/693
-		// return Promise.resolve(window.showQuickPick(new Promise((resolve, reject) => {
-		// 	setImmediate(() => {
-		// 		try {
-		// 			this._env.run(generator, this.done)
-		// 				.on('npmInstall', () => {
-		// 					this.setState('install node dependencies');
-		// 				})
-		// 				.on('bowerInstall', () => {
-		// 					this.setState('install bower dependencies');
-		// 				})
-		// 				.on('end', () => {
-		// 					this.clearState();
-		// 					console.log(`${EOL}${figures.tick} done`);
-		// 				});
-
-		// 			reject();
-		// 		} catch (err) {
-		// 			reject(err);
-		// 		}
-		// 	});
-		// }))).catch(err => {
-		// 	if (err) {
-		// 		throw err;
-		// 	}
-		// });
 	}
 
 	private setState(state: string) {
