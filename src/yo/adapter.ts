@@ -16,15 +16,15 @@ export default class CodeAdapter {
 
 	constructor() {
 		let self = this;
-		
+
 		this.outChannel = window.createOutputChannel('Yeoman');
-		this.outChannel.clear();		
+		this.outChannel.clear();
 		this.outChannel.show();
 
 		// TODO Do not overwrite these methods
 		console.error = console.log = function() {
 			const line = util.format.apply(util, arguments);
-			
+
 			self.outBuffer += `${line}\n`;
 			self.outChannel.appendLine(line);
 			return this;
@@ -32,7 +32,7 @@ export default class CodeAdapter {
 
 		this.log.write = function() {
 			const line = util.format.apply(util, arguments);
-			
+
 			self.outBuffer += line;
 			self.outChannel.append(line);
 			return this;
@@ -56,7 +56,7 @@ export default class CodeAdapter {
 			.then(() => {
 				this.outChannel.clear();
 				this.outChannel.append(this.outBuffer);
-				
+
 				callback(answers);
 			})
 			.catch(err => {
@@ -70,26 +70,26 @@ export default class CodeAdapter {
 
 	public diff(actual, expected) {
 		this.outChannel.clear();
-		
+
 		let result = diff.diffLines(actual, expected);
-		
+
 		result.map(part => {
 			let prefix = ' ';
-			
+
 			if (part.added === true) {
 				prefix = '+';
 			} else if (part.removed === true) {
 				prefix = '-';
 			}
-			
+
 			part.value = part.value.split('\n').map(line => {
 				if (line.trim().length === 0) {
 					return line;
 				}
-				
+
 				return `${prefix}${line}`
 			}).join('\n');
-			
+
 			this.outChannel.append(part.value);
 		});
 	}
