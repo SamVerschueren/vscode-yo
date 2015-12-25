@@ -16,6 +16,11 @@ generators will pop-up. The default generator is marked by a ★.
 
 ![](https://github.com/SamVerschueren/vscode-yo/raw/master/media/sub-generator.gif)
 
+### Pre-requirements
+* [Node] (https://nodejs.org)
+* [NPM] (https://www.npmjs.com) 
+* [Yeoman] (http://yeoman.io)
+* An generator from your choice [Yeoman generators](http://yeoman.io/generators/)
 
 ## License
 
