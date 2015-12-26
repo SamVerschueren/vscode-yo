@@ -7,6 +7,7 @@ import Yeoman from './yo/yo';
 const path = require('path');
 const fs = require('fs');
 const figures = require('figures');
+const opn = require('opn');
 
 export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
@@ -45,7 +46,7 @@ export function activate(context: ExtensionContext) {
 				return yo.run(`${main}:${sub}`, cwd);
 			})
 			.catch(err => {
-				if (err.message.toLowerCase() === 'did not provide required argument name!') {
+				if (err && err.message.toLowerCase() === 'did not provide required argument name!') {
 					const options: InputBoxOptions = {
 						prompt: `${sub} name?`
 					};
@@ -61,7 +62,7 @@ export function activate(context: ExtensionContext) {
 				}
 			})
 			.catch(err => {
-				if (err instanceof EscapeException) {
+				if (!err || err instanceof EscapeException) {
 					return;
 				}
 
@@ -92,15 +93,30 @@ function runSubGenerators(subGenerators: string[]) {
 }
 
 function list(yo: Yeoman): Promise<QuickPickItem[]> {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		yo.getEnvironment().lookup(() => {
-			resolve(yo.getGenerators().map(generator => {
+			const generators = yo.getGenerators().map(generator => {
 				return {
 					label: generator.name.split(/\-(.+)?/)[1],
 					description: generator.description,
 					subGenerators: generator.subGenerators
 				};
-			}));
+			});
+			
+			if (generators.length === 0) {
+				reject();
+				
+				window.showInformationMessage('Make sure to install some generators first.', 'more info')
+					.then(choice => {
+						if (choice === 'more info') {
+							opn('http://yeoman.io/learning/');
+						}
+					});
+				
+				return;
+			}
+			
+			resolve(generators);
 		});
 	});
 }

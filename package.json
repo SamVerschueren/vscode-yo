@@ -49,6 +49,7 @@
     "figures": "^1.4.0",
     "fix-path": "^1.1.0",
     "lodash": "^3.10.1",
+    "opn": "^3.0.3",
     "read-pkg-up": "^1.0.1",
     "semver": "^5.0.3",
     "strip-ansi": "^3.0.0",
