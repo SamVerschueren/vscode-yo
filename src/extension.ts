@@ -1,7 +1,8 @@
 'use strict';
 
 import {window, workspace, commands, ExtensionContext, QuickPickItem, InputBoxOptions} from 'vscode';
-import EscapeException from './utils/EscapeException'
+import EscapeException from './utils/EscapeException';
+import runAsync from './utils/run-async';
 import Yeoman from './yo/yo';
 
 const path = require('path');
@@ -46,20 +47,30 @@ export function activate(context: ExtensionContext) {
 				return yo.run(`${main}:${sub}`, cwd);
 			})
 			.catch(err => {
-				if (err && err.message.toLowerCase() === 'did not provide required argument name!') {
-					const options: InputBoxOptions = {
-						prompt: `${sub} name?`
-					};
+				const regexp = new RegExp('Did not provide required argument (.*?)!', 'i');
 
-					return window.showInputBox(options);
+				if (err) {
+					const match = err.message.match(regexp);
+
+					if (match) {
+						return `${sub} ${match[1]}?`;
+					}
 				}
 
 				throw err;
 			})
+			.then((question: any) => {
+				return window.showInputBox({prompt: question})
+					.then(input => {
+						if (!input) {
+							throw new EscapeException();
+						}
+
+						return input;
+					});
+			})
 			.then(argument => {
-				if (argument !== undefined) {
-					return yo.run(`${main}:${sub} ${argument}`, cwd);
-				}
+				return yo.run(`${main}:${sub} ${argument}`, cwd);
 			})
 			.catch(err => {
 				if (!err || err instanceof EscapeException) {
@@ -102,20 +113,20 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 					subGenerators: generator.subGenerators
 				};
 			});
-			
+
 			if (generators.length === 0) {
 				reject();
-				
+
 				window.showInformationMessage('Make sure to install some generators first.', 'more info')
 					.then(choice => {
 						if (choice === 'more info') {
 							opn('http://yeoman.io/learning/');
 						}
 					});
-				
+
 				return;
 			}
-			
+
 			resolve(generators);
 		});
 	});

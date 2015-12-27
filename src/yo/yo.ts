@@ -88,30 +88,32 @@ export default class Yeoman {
 			generator = generator.slice(prefix.length);
 		}
 
-		return Promise.resolve(window.showQuickPick(new Promise((resolve, reject) => {
-			setImmediate(() => {
-				try {
-					this._env.run(generator, this.done)
-						.on('npmInstall', () => {
-							this.setState('install node dependencies');
-						})
-						.on('bowerInstall', () => {
-							this.setState('install bower dependencies');
-						})
-						.on('end', () => {
-							this.clearState();
-							console.log(`${EOL}${figures.tick} done`);
-						});
+		return new Promise((resolve, reject) => {
+			Promise.resolve(window.showQuickPick(new Promise((res, rej) => {
+				setImmediate(() => {
+					try {
+						this._env.run(generator, this.done)
+							.on('npmInstall', () => {
+								this.setState('install node dependencies');
+							})
+							.on('bowerInstall', () => {
+								this.setState('install bower dependencies');
+							})
+							.on('end', () => {
+								this.clearState();
+								console.log(`${EOL}${figures.tick} done`);
+							});
 
-					reject();
-				} catch (err) {
-					reject(err);
-				}
+						resolve();
+					} catch (err) {
+						reject(err);
+					}
+
+					rej();
+				});
+			}))).catch(err => {
+				// do nothing because the input is always rejected
 			});
-		}))).catch(err => {
-			if (err) {
-				throw err;
-			}
 		});
 	}
 
