@@ -4,9 +4,11 @@ import {window, OutputChannel, ViewColumn} from 'vscode';
 import * as util from 'util';
 import PromptFactory from '../prompts/factory';
 import EscapeException from '../utils/EscapeException';
+import runAsync from '../utils/run-async';
 
 const logger = require('yeoman-environment/lib/util/log');
 const diff = require('diff');
+const isFn = require('is-fn');
 
 export default class CodeAdapter {
 
@@ -44,9 +46,17 @@ export default class CodeAdapter {
 
 		var promise = questions.reduce((promise, question) => {
 			return promise.then(() => {
-				return PromptFactory.createPrompt(question);
-			}).then(prompt => {
-				if (!question.when || question.when(answers) === true) {
+				if (question.when === undefined) {
+					return true;
+				} else if (isFn(question.when)) {
+					return runAsync(question.when)(answers);
+				}
+
+				return question.when;
+			}).then(askQuestion => {
+				if (askQuestion) {
+					const prompt = PromptFactory.createPrompt(question);
+
 					return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
 				}
 			});
