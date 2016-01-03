@@ -3,6 +3,7 @@
 import {window, InputBoxOptions} from 'vscode';
 import Prompt from './prompt';
 import EscapeException from '../utils/EscapeException';
+import runAsync from '../utils/run-async';
 
 const figures = require('figures');
 
@@ -19,34 +20,36 @@ export default class InputPrompt extends Prompt {
 	}
 
 	public render() {
-		let placeHolder = this._question.default;
+		return runAsync(this._question.default)()
+			.then(placeHolder => {
+				if (placeHolder instanceof Error) {
+					placeHolder = placeHolder.message;
+					this._question.default = undefined;
+				}
 
-		if (this._question.default instanceof Error) {
-			placeHolder = this._question.default.message;
-			this._question.default = undefined;
-		}
+				this._options.placeHolder = placeHolder;
 
-		this._options.placeHolder = placeHolder;
-
-		return window.showInputBox(this._options)
+				return window.showInputBox(this._options);
+			})
 			.then(result => {
 				if (result === undefined) {
 					throw new EscapeException();
 				}
 
 				if (result === '') {
-					result = this._question.default || '';
+					result = this._options.placeHolder || '';
 				}
 
-				const valid = this._question.validate ? this._question.validate(result || '') : true;
+				return runAsync(this._question.validate)(result || '')
+					.then(valid => {
+						if (valid !== undefined && valid !== true) {
+							this._question.default = new Error(`${figures.warning} ${valid}`);
 
-				if (valid !== true) {
-					this._question.default = new Error(`${figures.warning} ${valid}`);
+							return this.render();
+						}
 
-					return this.render();
-				}
-
-				return result;
+						return result;
+					});
 			});
 	}
 }
