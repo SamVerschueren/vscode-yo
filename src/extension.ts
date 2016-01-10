@@ -14,7 +14,7 @@ export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
 
 	const disposable = commands.registerCommand('yo', () => {
-		const yo = new Yeoman();
+		const yo = new Yeoman({cwd});
 
 		let main, sub;
 

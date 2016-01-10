@@ -16,12 +16,14 @@ const frame = elegantSpinner();
 
 export default class Yeoman {
 
+	private _options: any;
 	private _env: any;
 	private _status: StatusBarItem;
 	private _interval: any;
 
-	public constructor() {
-		this._env = createEnvironment();
+	public constructor(options?: any) {
+		this._options = options;
+		this._env = createEnvironment(undefined, options);
 		this._status = window.createStatusBarItem(StatusBarAlignment.Left);
 		this._interval;
 	}
