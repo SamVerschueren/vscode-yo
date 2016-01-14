@@ -14,14 +14,14 @@ export function activate(context: ExtensionContext) {
 	const cwd = workspace.rootPath;
 
 	const disposable = commands.registerCommand('yo', () => {
-		const yo = new Yeoman({cwd});
-
-		let main, sub;
-
 		if (!cwd) {
 			window.showErrorMessage('Please open a workspace directory first.');
 			return;
 		}
+		
+		const yo = new Yeoman({cwd});
+		let main;
+		let sub;
 
 		Promise.resolve(window.showQuickPick(list(yo)))
 			.then((generator: any) => {
@@ -105,29 +105,31 @@ function runSubGenerators(subGenerators: string[]) {
 
 function list(yo: Yeoman): Promise<QuickPickItem[]> {
 	return new Promise((resolve, reject) => {
-		yo.getEnvironment().lookup(() => {
-			const generators = yo.getGenerators().map(generator => {
-				return {
-					label: generator.name.split(/\-(.+)?/)[1],
-					description: generator.description,
-					subGenerators: generator.subGenerators
-				};
+		setImmediate(() => {
+			yo.getEnvironment().lookup(() => {
+				const generators = yo.getGenerators().map(generator => {
+					return {
+						label: generator.name.split(/\-(.+)?/)[1],
+						description: generator.description,
+						subGenerators: generator.subGenerators
+					};
+				});
+
+				if (generators.length === 0) {
+					reject();
+
+					window.showInformationMessage('Make sure to install some generators first.', 'more info')
+						.then(choice => {
+							if (choice === 'more info') {
+								opn('http://yeoman.io/learning/');
+							}
+						});
+
+					return;
+				}
+
+				resolve(generators);
 			});
-
-			if (generators.length === 0) {
-				reject();
-
-				window.showInformationMessage('Make sure to install some generators first.', 'more info')
-					.then(choice => {
-						if (choice === 'more info') {
-							opn('http://yeoman.io/learning/');
-						}
-					});
-
-				return;
-			}
-
-			resolve(generators);
 		});
 	});
 }
