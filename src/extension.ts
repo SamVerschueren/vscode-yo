@@ -18,7 +18,7 @@ export function activate(context: ExtensionContext) {
 			window.showErrorMessage('Please open a workspace directory first.');
 			return;
 		}
-		
+
 		const yo = new Yeoman({cwd});
 		let main;
 		let sub;

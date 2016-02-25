@@ -51,6 +51,11 @@ export default class Yeoman {
 			const generatorVersion: any = pkg.dependencies['yeoman-generator'];
 			const generatorMeta: any = _.pick(pkg, 'name', 'version', 'description');
 
+			// Ignore the generator if does not depend on `yeoman-generator`
+			if (!generatorVersion) {
+				return null;
+			}
+
 			// Flag generator to indecate if the generator version is fully supported or not.
 			// https://github.com/yeoman/yeoman-app/issues/16#issuecomment-121054821
 			generatorMeta.isCompatible = semver.ltr('0.17.6', generatorVersion);
