@@ -42,7 +42,7 @@ export default class Yeoman {
 			const item = generatorsMeta[key];
 			const name = key.split(':')[0];
 
-			const pkgPath = readPkgUp.sync({cwd: item.resolved});
+			const pkgPath = readPkgUp.sync({ cwd: item.resolved });
 			if (!pkgPath.pkg) {
 				return null;
 			}
@@ -51,12 +51,11 @@ export default class Yeoman {
 			const generatorVersion: any = pkg.dependencies['yeoman-generator'];
 			const generatorMeta: any = _.pick(pkg, 'name', 'version', 'description');
 
-			//generator version can be null if package is misconfigured therefore break semver.ltr() if given null
-			//see https://github.com/SamVerschueren/vscode-yo/issues/35 for details
-		        if(!generatorVersion) {
-		        	return null;
-	            	}
-            
+			//ignore  generator if it does not have a dependency to yeoman-generator expressed in package.config
+			if (!generatorVersion) {
+				return null;
+			}
+
 			// Flag generator to indecate if the generator version is fully supported or not.
 			// https://github.com/yeoman/yeoman-app/issues/16#issuecomment-121054821
 			generatorMeta.isCompatible = semver.ltr('0.17.6', generatorVersion);
