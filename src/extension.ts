@@ -16,7 +16,7 @@ export function activate(context: ExtensionContext) {
 	const disposable = commands.registerCommand('yo', () => {
 
 		//if a file is opened in text editor, use its folder as the generator root folder rather than the workspace.rootpath
-		if(window.activeTextEditor && window.activeTextEditor.document && window.activeTextEditor.document.fileName) {
+		if (window.activeTextEditor && window.activeTextEditor.document && window.activeTextEditor.document.fileName) {
 			cwd = path.dirname(window.activeTextEditor.document.fileName);
 		}
 		else {
@@ -28,7 +28,7 @@ export function activate(context: ExtensionContext) {
 			return;
 		}
 
-		const yo = new Yeoman({cwd});
+		const yo = new Yeoman({ cwd });
 		let main;
 		let sub;
 
@@ -69,7 +69,7 @@ export function activate(context: ExtensionContext) {
 				throw err;
 			})
 			.then((question: any) => {
-				return window.showInputBox({prompt: question})
+				return window.showInputBox({ prompt: question })
 					.then(input => {
 						if (!input) {
 							throw new EscapeException();
