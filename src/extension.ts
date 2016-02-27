@@ -19,6 +19,9 @@ export function activate(context: ExtensionContext) {
 		if(window.activeTextEditor && window.activeTextEditor.document && window.activeTextEditor.document.fileName) {
 			cwd = path.dirname(window.activeTextEditor.document.fileName);
 		}
+		else {
+			cwd = workspace.rootPath;
+		}
 
 		if (!cwd) {
 			window.showErrorMessage('Please open a workspace directory first.');
