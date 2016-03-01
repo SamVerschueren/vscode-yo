@@ -42,7 +42,7 @@ export default class Yeoman {
 			const item = generatorsMeta[key];
 			const name = key.split(':')[0];
 
-			const pkgPath = readPkgUp.sync({ cwd: item.resolved });
+			const pkgPath = readPkgUp.sync({cwd: item.resolved});
 			if (!pkgPath.pkg) {
 				return null;
 			}

@@ -18,7 +18,6 @@ export function activate(context: ExtensionContext) {
 			window.showErrorMessage('Please open a workspace directory first.');
 			return;
 		}
-
 		const yo = new Yeoman({cwd});
 
 		let main;
@@ -61,7 +60,7 @@ export function activate(context: ExtensionContext) {
 				throw err;
 			})
 			.then((question: any) => {
-				return window.showInputBox({ prompt: question })
+				return window.showInputBox({prompt: question})
 					.then(input => {
 						if (!input) {
 							throw new EscapeException();
