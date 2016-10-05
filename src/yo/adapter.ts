@@ -41,8 +41,10 @@ export default class CodeAdapter {
 		};
 	}
 
-	public prompt(questions, callback) {
+	public prompt(questions) {
 		let answers = {};
+
+		return new Promise((resolve, reject) => {
 
 		var promise = questions.reduce((promise, question) => {
 			return promise.then(() => {
@@ -67,7 +69,7 @@ export default class CodeAdapter {
 				this.outChannel.clear();
 				this.outChannel.append(this.outBuffer);
 
-				callback(answers);
+				resolve(answers);
 			})
 			.catch(err => {
 				if (err instanceof EscapeException) {
@@ -75,7 +77,9 @@ export default class CodeAdapter {
 				}
 
 				window.showErrorMessage(err.message);
+				reject(err);
 			});
+		});
 	}
 
 	public diff(actual, expected) {
