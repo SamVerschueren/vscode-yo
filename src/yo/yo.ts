@@ -51,7 +51,7 @@ export default class Yeoman {
 			const generatorVersion: any = pkg.dependencies['yeoman-generator'];
 			const generatorMeta: any = _.pick(pkg, 'name', 'version', 'description');
 
-			//ignore  generator if it does not have a dependency to yeoman-generator expressed in package.config
+			// Ignore the generator if does not depend on `yeoman-generator
 			if (!generatorVersion) {
 				return null;
 			}
