@@ -24,7 +24,7 @@ export default class CodeAdapter {
 		this.outChannel.show();
 
 		// TODO Do not overwrite these methods
-		console.error = console.log = function () {
+		console.error = console.log = function() {
 			const line = util.format.apply(util, arguments);
 
 			self.outBuffer += `${line}\n`;
@@ -32,7 +32,7 @@ export default class CodeAdapter {
 			return this;
 		};
 
-		this.log.write = function () {
+		this.log.write = function() {
 			const line = util.format.apply(util, arguments);
 
 			self.outBuffer += line;
