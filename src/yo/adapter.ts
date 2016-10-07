@@ -24,7 +24,7 @@ export default class CodeAdapter {
 		this.outChannel.show();
 
 		// TODO Do not overwrite these methods
-		console.error = console.log = function() {
+		console.error = console.log = function () {
 			const line = util.format.apply(util, arguments);
 
 			self.outBuffer += `${line}\n`;
@@ -32,7 +32,7 @@ export default class CodeAdapter {
 			return this;
 		};
 
-		this.log.write = function() {
+		this.log.write = function () {
 			const line = util.format.apply(util, arguments);
 
 			self.outBuffer += line;
@@ -44,38 +44,45 @@ export default class CodeAdapter {
 	public prompt(questions, callback) {
 		let answers = {};
 
-		var promise = questions.reduce((promise, question) => {
-			return promise.then(() => {
-				if (question.when === undefined) {
-					return true;
-				} else if (isFn(question.when)) {
-					return runAsync(question.when)(answers);
-				}
+		return new Promise((resolve, reject) => {
+			var promise = questions.reduce((promise, question) => {
+				return promise.then(() => {
+					if (question.when === undefined) {
+						return true;
+					} else if (isFn(question.when)) {
+						return runAsync(question.when)(answers);
+					}
 
-				return question.when;
-			}).then(askQuestion => {
-				if (askQuestion) {
-					const prompt = PromptFactory.createPrompt(question);
+					return question.when;
+				}).then(askQuestion => {
+					if (askQuestion) {
+						const prompt = PromptFactory.createPrompt(question);
 
-					return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
-				}
-			});
-		}, Promise.resolve());
+						return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
+					}
+				});
+			}, Promise.resolve());
 
-		promise
-			.then(() => {
-				this.outChannel.clear();
-				this.outChannel.append(this.outBuffer);
+			promise
+				.then(() => {
+					this.outChannel.clear();
+					this.outChannel.append(this.outBuffer);
+					if(callback) {
+						callback(answers);
+					}
 
-				callback(answers);
-			})
-			.catch(err => {
-				if (err instanceof EscapeException) {
-					return;
-				}
+					resolve(answers);
+				})
+				.catch(err => {
+					if (err instanceof EscapeException) {
+						return;
+					}
 
-				window.showErrorMessage(err.message);
-			});
+					reject(err);
+					window.showErrorMessage(err.message);
+				});
+		});
+
 	}
 
 	public diff(actual, expected) {
