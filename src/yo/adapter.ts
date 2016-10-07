@@ -78,8 +78,8 @@ export default class CodeAdapter {
 						return;
 					}
 
-					reject(err);
 					window.showErrorMessage(err.message);
+					reject(err);
 				});
 		});
 
