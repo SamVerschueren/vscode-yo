@@ -43,39 +43,46 @@ export default class CodeAdapter {
 
 	public prompt(questions, callback) {
 		let answers = {};
+		callback = callback || function() {};
 
-		var promise = questions.reduce((promise, question) => {
-			return promise.then(() => {
-				if (question.when === undefined) {
-					return true;
-				} else if (isFn(question.when)) {
-					return runAsync(question.when)(answers);
-				}
+		return new Promise((resolve, reject) => {
+			var promise = questions.reduce((promise, question) => {
+				return promise.then(() => {
+					if (question.when === undefined) {
+						return true;
+					} else if (isFn(question.when)) {
+						return runAsync(question.when)(answers);
+					}
 
-				return question.when;
-			}).then(askQuestion => {
-				if (askQuestion) {
-					const prompt = PromptFactory.createPrompt(question);
+					return question.when;
+				}).then(askQuestion => {
+					if (askQuestion) {
+						const prompt = PromptFactory.createPrompt(question);
 
-					return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
-				}
-			});
-		}, Promise.resolve());
+						return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
+					}
+				});
+			}, Promise.resolve());
 
-		promise
-			.then(() => {
-				this.outChannel.clear();
-				this.outChannel.append(this.outBuffer);
+			promise
+				.then(() => {
+					this.outChannel.clear();
+					this.outChannel.append(this.outBuffer);
 
-				callback(answers);
-			})
-			.catch(err => {
-				if (err instanceof EscapeException) {
-					return;
-				}
+					callback(answers);
 
-				window.showErrorMessage(err.message);
-			});
+					resolve(answers);
+				})
+				.catch(err => {
+					if (err instanceof EscapeException) {
+						return;
+					}
+
+					window.showErrorMessage(err.message);
+					reject(err);
+				});
+		});
+
 	}
 
 	public diff(actual, expected) {
