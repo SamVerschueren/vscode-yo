@@ -43,6 +43,7 @@ export default class CodeAdapter {
 
 	public prompt(questions, callback) {
 		let answers = {};
+		callback = callback || function() {};
 
 		return new Promise((resolve, reject) => {
 			var promise = questions.reduce((promise, question) => {
@@ -67,9 +68,8 @@ export default class CodeAdapter {
 				.then(() => {
 					this.outChannel.clear();
 					this.outChannel.append(this.outBuffer);
-					if(callback) {
-						callback(answers);
-					}
+
+					callback(answers);
 
 					resolve(answers);
 				})
