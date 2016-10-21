@@ -55,7 +55,7 @@ export default class CodeAdapter {
 				})
 				.then(askQuestion => {
 					if (askQuestion) {
-						const prompt = PromptFactory.createPrompt(question);
+						const prompt = PromptFactory.createPrompt(question, answers);
 
 						return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
 					}

@@ -8,7 +8,7 @@ import ExpandPrompt from './expand';
 
 export default class PromptFactory {
 
-	public static createPrompt(question: any): Prompt {
+	public static createPrompt(question: any, answers: any): Prompt {
 		/**
 		 * TODO:
 		 *   - folder
@@ -16,9 +16,9 @@ export default class PromptFactory {
 		switch (question.type || 'input') {
 			case 'string':
 			case 'input':
-				return new InputPrompt(question);
+				return new InputPrompt(question, answers);
 			case 'password':
-				return new PasswordPrompt(question);
+				return new PasswordPrompt(question, answers);
 			case 'list':
 				return new ListPrompt(question);
 			case 'confirm':

@@ -9,8 +9,8 @@ export default class InputPrompt extends Prompt {
 
 	protected _options: InputBoxOptions;
 
-	constructor(question: any) {
-		super(question);
+	constructor(question: any, answers: any) {
+		super(question, answers);
 
 		this._options = {
 			prompt: this._question.message
@@ -18,7 +18,7 @@ export default class InputPrompt extends Prompt {
 	}
 
 	public render() {
-		return runAsync(this._question.default)()
+		return runAsync(this._question.default)(this._answers)
 			.then(placeHolder => {
 				if (placeHolder instanceof Error) {
 					placeHolder = placeHolder.message;
