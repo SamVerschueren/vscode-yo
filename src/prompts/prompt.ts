@@ -1,5 +1,3 @@
-'use strict';
-
 abstract class Prompt {
 
 	protected _question: any;

@@ -1,7 +1,4 @@
-'use strict';
-
-import {window} from 'vscode';
-
+import { window } from 'vscode';
 const runAsync = require('run-async');
 const isFn = require('is-fn');
 

@@ -1,13 +1,11 @@
-'use strict';
-
 import * as path from 'path';
 import * as fs from 'fs';
 import * as childProcess from 'child_process';
 import {EOL} from 'os';
 import CodeAdapter from './adapter';
-import yeoman = require('yeoman-environment');
-
+const yeoman = require('yeoman-environment');
 const uniq = require('array-uniq');
+
 const win32 = process.platform === 'win32';
 
 const getNpmPaths = function () {

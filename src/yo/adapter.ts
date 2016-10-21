@@ -1,11 +1,8 @@
-'use strict';
-
-import {window, OutputChannel, ViewColumn} from 'vscode';
 import * as util from 'util';
+import { window, OutputChannel, ViewColumn } from 'vscode';
 import PromptFactory from '../prompts/factory';
 import EscapeException from '../utils/EscapeException';
 import runAsync from '../utils/run-async';
-
 const logger = require('yeoman-environment/lib/util/log');
 const diff = require('diff');
 const isFn = require('is-fn');

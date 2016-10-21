@@ -1,5 +1,3 @@
-'use strict';
-
 import Prompt from './prompt';
 import InputPrompt from './input';
 import PasswordPrompt from './password';

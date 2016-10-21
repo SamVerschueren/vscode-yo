@@ -38,6 +38,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.37",
     "@types/node": "^6.0.45",
     "typescript": "^2.0.3",
     "vscode": "*"

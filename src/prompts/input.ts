@@ -1,6 +1,4 @@
-'use strict';
-
-import {window, InputBoxOptions} from 'vscode';
+import { window, InputBoxOptions } from 'vscode';
 import Prompt from './prompt';
 import EscapeException from '../utils/EscapeException';
 import runAsync from '../utils/run-async';

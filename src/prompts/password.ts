@@ -1,5 +1,3 @@
-'use strict';
-
 import InputPrompt from './input';
 
 export default class PasswordPrompt extends InputPrompt {

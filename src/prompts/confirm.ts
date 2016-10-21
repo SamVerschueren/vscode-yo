@@ -1,6 +1,4 @@
-'use strict';
-
-import {window, QuickPickItem, QuickPickOptions} from 'vscode';
+import { window, QuickPickItem, QuickPickOptions } from 'vscode';
 import Prompt from './prompt';
 import EscapeException from '../utils/EscapeException';
 

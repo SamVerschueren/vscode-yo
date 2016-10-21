@@ -1,12 +1,8 @@
-'use strict';
-
 import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
 import {EOL} from 'os';
 import * as fs from 'fs';
 import * as _ from 'lodash';
-
 import createEnvironment from './environment';
-
 const readPkgUp = require('read-pkg-up');
 const semver = require('semver');
 const elegantSpinner = require('elegant-spinner');
