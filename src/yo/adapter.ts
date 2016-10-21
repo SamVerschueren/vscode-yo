@@ -43,26 +43,29 @@ export default class CodeAdapter {
 
 	public prompt(questions, callback) {
 		let answers = {};
+		callback = callback || function() {};
 
-		var promise = questions.reduce((promise, question) => {
-			return promise.then(() => {
-				if (question.when === undefined) {
-					return true;
-				} else if (isFn(question.when)) {
-					return runAsync(question.when)(answers);
-				}
+		const promise = questions.reduce((promise, question) => {
+			return promise
+				.then(() => {
+					if (question.when === undefined) {
+						return true;
+					} else if (isFn(question.when)) {
+						return runAsync(question.when)(answers);
+					}
 
-				return question.when;
-			}).then(askQuestion => {
-				if (askQuestion) {
-					const prompt = PromptFactory.createPrompt(question);
+					return question.when;
+				})
+				.then(askQuestion => {
+					if (askQuestion) {
+						const prompt = PromptFactory.createPrompt(question);
 
-					return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
-				}
-			});
+						return prompt.render().then(result => answers[question.name] = question.filter ? question.filter(result) : result);
+					}
+				});
 		}, Promise.resolve());
 
-		promise
+		return promise
 			.then(() => {
 				this.outChannel.clear();
 				this.outChannel.append(this.outBuffer);
@@ -75,6 +78,7 @@ export default class CodeAdapter {
 				}
 
 				window.showErrorMessage(err.message);
+				throw err;
 			});
 	}
 
