@@ -68,6 +68,7 @@ export default class CodeAdapter {
 				this.outChannel.append(this.outBuffer);
 
 				callback(answers);
+				return answers;
 			})
 			.catch(err => {
 				if (err instanceof EscapeException) {
