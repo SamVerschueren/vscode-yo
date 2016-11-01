@@ -6,6 +6,17 @@ const figures = require('figures');
 export default class CheckboxPrompt extends Prompt {
 
 	constructor(question: any) {
+		question.choices = question.choices.map(choice => {
+			if (typeof choice === 'string') {
+				return {
+					name: choice,
+					value: choice
+				};
+			}
+
+			return choice;
+		});
+
 		super(question);
 	}
 
