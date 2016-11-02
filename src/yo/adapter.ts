@@ -1,7 +1,6 @@
 import * as util from 'util';
 import { window, OutputChannel, ViewColumn } from 'vscode';
 import PromptFactory from '../prompts/factory';
-import EscapeException from '../utils/EscapeException';
 import runAsync from '../utils/run-async';
 const logger = require('yeoman-environment/lib/util/log');
 const diff = require('diff');
@@ -69,14 +68,6 @@ export default class CodeAdapter {
 
 				callback(answers);
 				return answers;
-			})
-			.catch(err => {
-				if (err instanceof EscapeException) {
-					return;
-				}
-
-				window.showErrorMessage(err.message);
-				throw err;
 			});
 	}
 

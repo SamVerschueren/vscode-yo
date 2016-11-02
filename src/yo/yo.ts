@@ -3,6 +3,7 @@ import {EOL} from 'os';
 import * as fs from 'fs';
 import * as _ from 'lodash';
 import createEnvironment from './environment';
+import EscapeException from '../utils/EscapeException';
 const readPkgUp = require('read-pkg-up');
 const semver = require('semver');
 const elegantSpinner = require('elegant-spinner');
@@ -101,6 +102,12 @@ export default class Yeoman {
 							})
 							.on('bowerInstall', () => {
 								this.setState('install bower dependencies');
+							})
+							.on('error', err => {
+								if (!(err instanceof EscapeException)) {
+									window.showErrorMessage(err.message);
+									throw err;
+								}
 							})
 							.on('end', () => {
 								this.clearState();
