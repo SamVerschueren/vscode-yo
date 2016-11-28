@@ -10,7 +10,12 @@ export default class ListPrompt extends Prompt {
 
 	public render() {
 		const choices = this._question.choices.reduce((result, choice) => {
-			result[choice.name] = choice.value;
+			// choices can be string array or array of { name, value }
+			if (choice.name) {
+				result[choice.name] = choice.value;
+			} else {
+				result[choice] = choice;
+			}
 			return result;
 		}, {});
 
