@@ -109,6 +109,8 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 			yo.getEnvironment().lookup(() => {
 				const generators = yo.getGenerators().map(generator => {
 					return {
+						// Fix bug in issue 48 https://github.com/SamVerschueren/vscode-yo/issues/48
+						// Support scoped generators.
 						label: generator.name.replace(/(^|\/)generator\-/i, '$1'),
 						description: generator.description,
 						subGenerators: generator.subGenerators
