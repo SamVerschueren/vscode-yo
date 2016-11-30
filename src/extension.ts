@@ -109,7 +109,7 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 			yo.getEnvironment().lookup(() => {
 				const generators = yo.getGenerators().map(generator => {
 					return {
-						label: generator.name.split(/\-(.+)?/)[1],
+						label: generator.name.replace(/(^|\/)generator\-/i, '$1'),
 						description: generator.description,
 						subGenerators: generator.subGenerators
 					};
