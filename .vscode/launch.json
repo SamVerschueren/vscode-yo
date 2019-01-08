@@ -9,7 +9,7 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/out",
+			"outFiles": [ "${workspaceRoot}/out" ],
 			"preLaunchTask": "npm"
 		}
 	]

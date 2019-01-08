@@ -23,7 +23,10 @@ export function activate(context: ExtensionContext) {
 		let main;
 		let sub;
 
-		Promise.resolve(window.showQuickPick(list(yo)))
+		Promise.resolve(window.showQuickPick(list(yo), { 
+				placeHolder: 'Select one of the available Yeoman generators below.', 
+				ignoreFocusOut: true
+			}))
 			.then((generator: any) => {
 				if (generator === undefined) {
 					throw new EscapeException();
